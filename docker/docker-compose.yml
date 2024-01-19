@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  camera_driver:
+    image: camera_driver:v1
+    container_name: camera_driver
+    privileged: true    
+    stdin_open: true # 保持标准输入打开以允许与容器的交互
+    tty: true # 为容器分配一个伪终端，这对于运行交互式的 shell 命令是必需的
+    volumes: # 在容器中挂载以下卷
+      - type: bind
+        source: /home/yyp/PSA/HIKROBOT-MVS-CAMERA-ROS
+        target: /home/user/catkin_ws/src/HIKROBOT-MVS-CAMERA-ROS
+      - /tmp/.X11-unix:/tmp/.X11-unix # 映射 X11 socket 以允许图形界面
+      - /dev/bus/usb:/dev/bus/usb # 映射 USB 设备
+    environment: # 在容器中设置以下环境变量
+      - DISPLAY=$DISPLAY
+      - QT_X11_NO_MITSHM=1
+    network_mode: host # 使用主机的网络栈
+    command: zsh 
